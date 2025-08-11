@@ -5,7 +5,7 @@
 - <b>ATTENTION: Rebuild virglrenderer with old version in order to align with mesa in guest</b>
 ```c
 git clone https://gitlab.freedesktop.org/virgl/virglrenderer
-get reset --hard 8df4cba170940dad9350a99900293adbcef39b6c
+git reset --hard 8df4cba170940dad9350a99900293adbcef39b6c
 ```
 - We have tested it by using <b>Cinema4D</b> and <b>[GPUTest](https://www.geeks3d.com/gputest/)</b> on windows 10 guest, the driver worked very nice. 
 - We can use Mvisor+VGPU to create a VM with OpenGL acceleration, <b>regardless of the limitations of graphics card virtualization</b>.
