@@ -180,8 +180,8 @@ NTSTATUS CtlGetParams(IN PDEVICE_CONTEXT Context, IN WDFREQUEST Request, IN size
     switch (*input)
     {
     case 0x1000:
-        // get vgpu staging config
-        VirtIOWdfDeviceGet(&Context->VDevice, FIELD_OFFSET(struct virtio_vgpu_config, staging), output, sizeof(UINT8));
+        // QEMU virtio-gpu has no staging config — return 0
+        *output = 0;
         break;
     case VIRTGPU_PARAM_SUPPORTED_CAPSET_IDs:
         *output = Capsets.CapsetIdMask;
