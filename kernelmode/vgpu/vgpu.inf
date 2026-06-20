@@ -32,7 +32,7 @@ WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with
 %ManufacturerName%=Standard,NT$ARCH$
 
 [Standard.NT$ARCH$]
-%vgpu.DeviceDesc%=vgpu_Device, PCI\VEN_1AF4&DEV_105B&SUBSYS_1100_INX_SUBSYS_VENDOR_ID&REV_01, PCI\VEN_1AF4&DEV_105B
+%vgpu.DeviceDesc%=vgpu_Device, PCI\VEN_1AF4&DEV_1050&SUBSYS_11001AF4&REV_01, PCI\VEN_1AF4&DEV_1050
 
 [vgpu_Device.NT]
 CopyFiles=Drivers_Dir
@@ -82,8 +82,8 @@ KmdfLibraryVersion = $KMDFVERSION$
 
 [Strings]
 SPSVCINST_ASSOCSERVICE= 0x00000002
-ManufacturerName="Mvisor" ;TODO: Replace with your manufacturer name
-ClassName="Mvisor Device" ; TODO: edit ClassName
-DiskName = "vgpu Installation Disk"
-vgpu.DeviceDesc = "Mvisor VGPU"
-vgpu.SVCDESC = "vgpu Service"
+ManufacturerName="Avatar Imaging"
+ClassName="VirtIO GPU 3D"
+DiskName = "VirtIO GPU 3D Driver Installation Disk"
+vgpu.DeviceDesc = "VirtIO GPU 3D (VirGL)"
+vgpu.SVCDESC = "VirtIO GPU 3D Service"

@@ -26,15 +26,18 @@
 #define VIRTIO_VGPU_MEMORY_TAG  ((ULONG)'upgV')
 #define ROUND_UP(x, n)          (((x) + (n) - 1) & (-(n)))
 
+/* QEMU virtio-gpu config structure (replaces Mvisor's virtio_vgpu_config) */
 #pragma pack(1)
-struct virtio_vgpu_config {
-    __u8  staging;
-    __u8  num_queues;
-    __u32 num_capsets;
-    __u64 memory_size;
-    __u64 capabilities;
+struct virtio_gpu_config {
+    __le32 events_read;
+    __le32 events_clear;
+    __le32 num_scanouts;
+    __le32 num_capsets;
 };
 #pragma pack()
+
+/* QEMU virtio-gpu always has 2 queues: controlq + cursorq */
+#define QEMU_VIRTIO_GPU_NUM_QUEUES 2
 
 typedef struct _MEMORY_DESCRIPTOR {
     PVOID               VirtualAddress;

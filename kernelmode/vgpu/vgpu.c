@@ -368,10 +368,9 @@ NTSTATUS VirtioVgpuDevicePrepareHardware(IN WDFDEVICE Device, IN WDFCMRESLIST Re
         return status;
     }
 
-    // get virtio config NumVirtQueues
-    VirtIOWdfDeviceGet(&context->VDevice, FIELD_OFFSET(struct virtio_vgpu_config, num_queues), &context->NumVirtQueues, sizeof(UINT8));
-    ASSERT(context->NumVirtQueues > 0 && context->NumVirtQueues <= MAX_INTERRUPT_COUNT);
-    VGPU_DEBUG_LOG("get virtio queue num=%d", context->NumVirtQueues);
+    // QEMU virtio-gpu always has 2 queues (controlq + cursorq)
+    context->NumVirtQueues = QEMU_VIRTIO_GPU_NUM_QUEUES;
+    VGPU_DEBUG_LOG("using %d virtio queues (QEMU virtio-gpu)", context->NumVirtQueues);
 
     // allocate virtqueue pointer
     context->VirtQueues = ExAllocatePool2(POOL_FLAG_NON_PAGED, context->NumVirtQueues * sizeof(struct virtqueue*), VIRTIO_VGPU_MEMORY_TAG);
@@ -381,14 +380,15 @@ NTSTATUS VirtioVgpuDevicePrepareHardware(IN WDFDEVICE Device, IN WDFCMRESLIST Re
     context->VirtQueueLocks = ExAllocatePool2(POOL_FLAG_NON_PAGED, context->NumVirtQueues * sizeof(WDFSPINLOCK), VIRTIO_VGPU_MEMORY_TAG);
     ASSERT(context->VirtQueueLocks != NULL);
 
-    // get vgpu capabilities
-    VirtIOWdfDeviceGet(&context->VDevice, FIELD_OFFSET(struct virtio_vgpu_config, capabilities), &context->Capabilities, sizeof(ULONG64));
+    // QEMU virtio-gpu: no capabilities field, set to 0
+    context->Capabilities = 0;
 
-    // get vgpu memory config
-    VirtIOWdfDeviceGet(&context->VDevice, FIELD_OFFSET(struct virtio_vgpu_config, memory_size), &vgpuMemorySize, sizeof(ULONG64));
+    // QEMU virtio-gpu: no memory_size field, use a default allocation (64MB)
+    vgpuMemorySize = 64 * 1024 * 1024;
 
-    // get vgpu num_capsets config
-    VirtIOWdfDeviceGet(&context->VDevice, FIELD_OFFSET(struct virtio_vgpu_config, num_capsets), &Capsets.NumCaps, sizeof(ULONG32));
+    // get num_capsets from QEMU virtio-gpu config
+    VirtIOWdfDeviceGet(&context->VDevice, FIELD_OFFSET(struct virtio_gpu_config, num_capsets), &Capsets.NumCaps, sizeof(ULONG32));
+    VGPU_DEBUG_LOG("QEMU virtio-gpu num_capsets=%d", Capsets.NumCaps);
 
     // initialize Capsets
     Capsets.Initialized = FALSE;

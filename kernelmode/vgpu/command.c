@@ -19,8 +19,11 @@
 #include "global.h"
 #include "command.h"
 
+/* QEMU virtio-gpu: all commands go to controlq (queue 0)
+ * Queue 1 is cursorq (not used by this driver)
+ * Mvisor had separate command/control queues, QEMU does not */
 #define COMMAND_QUEUE 0
-#define CONTROL_QUEUE 1
+#define CONTROL_QUEUE 0
 
 
 NTSTATUS PushQueue(PDEVICE_CONTEXT Context,
